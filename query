@@ -1,6 +1,5 @@
-#!/bin/sh
-influx -precision rfc3339 -execute 'use financial
-select * from "amzn_min_i"
+use financial
+influx -precision rfc3339 -execute select * from "amzn_min_i" -database="financial"
 select * from "amzn_min_i" limit 5
 select count("close") from "amzn_min_i"
 select count("close") from "amzn_min_i" where "volume" > 50000
@@ -29,4 +28,4 @@ select MEAN("close") into "my_averages" from "eur_ao_fx_07_16" where time < now(
 select * from "my_averages" limit 5
 
 create continuous query test_cq on financial begin select mean(*) into "all_my_averages" from "eur_ao_fx_07_16"  where time < now() - (365d * 8) group by time(1h) end
-'
+

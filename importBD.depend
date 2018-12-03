@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1543826146 source:/home/josecarvalho/Documents/PROG/CodeBlocks/importBD/main.cpp
+	<iostream>
+	<fstream>
+	<cstdio>
+	<string>
+	<cstdlib>
+	<stdlib.h>
+	<ctime>
+

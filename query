@@ -1,0 +1,32 @@
+#!/bin/sh
+influx -precision rfc3339 -execute 'use financial
+select * from "amzn_min_i"
+select * from "amzn_min_i" limit 5
+select count("close") from "amzn_min_i"
+select count("close") from "amzn_min_i" where "volume" > 50000
+select *::field from "amzn_min_i" limit 5
+select ("close" * 2) + 500 from "amzn_min_i" limit 5
+select "open","close" from "amzn_min_i" limit 5
+select "open","close" from "amzn_min_i","cl_f_min_i" limit 5
+
+select "open","close" from "amzn_min_i" where "volume" > 50000 limit 5
+select "open","close" from "amzn_min_i" where "volume" > 50000 and time >= '2016-06-01' + 12h limit 5
+select * from "spx_07_16" order by time desc limit 1
+select "open" from "spx_07_16" where time >= now() - (365d * 3)
+select * from "eur_ao_fx_07_16" where time >= '2009-01-01' and time < '2010-01-01' limit 5
+
+select count("close") from "spx_07_16" where time >= '2009-01-01' and time < '2010-01-01' and "close" > 1000 group by time(7d)
+
+select mean("close") from "spx_07_16" where time >= '2009-01-01' and time < '2010-01-01' and "close" > 1000 group by time(14d)
+select mean("close") from "spx_07_16" where time >= '2009-01-01' and time < '2010-01-01' group by time(14d)
+
+select count("volume") from "gbp_ao_fx_07_16","amzn_min_07_16" where "volume" > 20000
+select mean("volume") from "jpy_ao_fx_07_16","amzn_min_07_16","eur_ao_fx_07_16"
+
+select MOVING_AVERAGE("close", 30) from "cl_f11_minute","amzn_min_07_16" order by time desc limit 5
+
+select MEAN("close") into "my_averages" from "eur_ao_fx_07_16" where time < now() - (365d * 8) group by time(1h)
+select * from "my_averages" limit 5
+
+create continuous query test_cq on financial begin select mean(*) into "all_my_averages" from "eur_ao_fx_07_16"  where time < now() - (365d * 8) group by time(1h) end
+'
